@@ -35,16 +35,28 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'API PESSOA ALEATORIA',
-            textAlign: TextAlign.center
           ),
         backgroundColor: Colors.black
       ),
+      body: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const <Widget>[
+            ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Nome'),
+              subtitle: Text('E-mail'),
+            )
+          ],
+        ),
+      ),
       floatingActionButton: const FloatingActionButton(
         onPressed: null,
-        tooltip: 'CLIQUE-ME',
-        child: Icon(Icons.add),
+        tooltip: 'PESQUISAR',
+        child: Icon(Icons.search),
         backgroundColor: Colors.black,
         ),
     );
