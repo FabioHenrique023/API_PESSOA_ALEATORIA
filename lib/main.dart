@@ -1,16 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-Future main() async {
+
+void main() {
   runApp(const MyApp());
-  final json = await fetch();
-  print(json['results']['name']);
-}
-Future<Map> fetch() async{
-  var url = 'https://randomuser.me/api/';
-  var pessoa = await http.get(Uri.parse(url));
-  var json = jsonDecode(pessoa.body) as Map<String, dynamic>;
-  return json;
 }
 
 class MyApp extends StatelessWidget {
@@ -36,36 +29,45 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+/*
+* API PESSOA ALEATÓRIA
+*
+*/
+Future<http.Response> getAPiUrl() {
+  return http.get(Uri.parse("https://randomuser.me/api/"));
+}
+
 class _MyHomePageState extends State<MyHomePage> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'API PESSOA ALEATORIA',
+          centerTitle: true,
+          title: const Text(
+            'API PESSOA ALEATORIA',
           ),
-        backgroundColor: Colors.black
-      ),
+          backgroundColor: Colors.black),
       body: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
             ListTile(
               leading: Icon(Icons.album),
-              title: Text('Nome'),
+              title: Text(''),
               subtitle: Text('E-mail'),
             )
           ],
         ),
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async{
+          var response = await getAPiUrl();
+          print(json.decode(response.body));
+        },
         tooltip: 'PESQUISAR',
         child: Icon(Icons.search),
         backgroundColor: Colors.black,
-        ),
+      ),
     );
   }
 }
