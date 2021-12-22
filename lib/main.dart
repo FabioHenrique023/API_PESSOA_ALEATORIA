@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:api_pessoa_aleatoria/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:api_pessoa_aleatoria/userModel.dart' as userModel;
 
 void main() {
   runApp(const MyApp());
@@ -24,16 +26,12 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-
-/*
-* API PESSOA ALEATÓRIA
-*
-*/
+/*Pego minha api metodo get*/
 Future<http.Response> getAPiUrl() {
+  print("Entrou na função getApiUrl\n\n");
   return http.get(Uri.parse("https://randomuser.me/api/"));
 }
 
@@ -51,21 +49,26 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
-            ListTile(
-              leading: Icon(Icons.album),
-              title: Text(''),
-              subtitle: Text('E-mail'),
-            )
+             ListTile(
+                leading: Icon(Icons.album),
+                title: Text(''),
+                subtitle: Text('E-mail'),
+              )
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           var response = await getAPiUrl();
-          print(json.decode(response.body));
+          print("Saiu da Função getApiUrl\n\n");
+          var jsonResponde = json.decode(response.body)["results"][0];
+          print("jsonResponde[name]: " + jsonResponde["name"]);
+          userModel.preencheUser(jsonResponde);
+          print("Saiu da funcao userMode.preencheUser");
         },
         tooltip: 'PESQUISAR',
-        child: Icon(Icons.search),
+        child: const Icon(Icons.search),
         backgroundColor: Colors.black,
       ),
     );
