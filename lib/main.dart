@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:api_pessoa_aleatoria/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:api_pessoa_aleatoria/userModel.dart';
+import 'package:api_pessoa_aleatoria/userModel.dart' as userModel;
 
 void main() {
   runApp(const MyApp());
@@ -32,12 +32,26 @@ class MyHomePage extends StatefulWidget {
 
 /*Pego minha api metodo get*/
 Future<http.Response> getAPiUrl() {
-  print("Entrou na função getApiUrl\n\n");
   return http.get(Uri.parse("https://randomuser.me/api/"));
+}
+
+Future<List<dynamic>> exibirApi() async {
+  var response = await getAPiUrl();
+  if (response.statusCode == 200) {
+    var jsonResponde = json.decode(response.body)["results"][0];
+    return userModel.preencheUser(jsonResponde);
+  } else {
+    throw Exception('Erro');
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+
+/*Começa sem usuário*/
+  bool temUsuario = false;
+  User? user;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -46,26 +60,30 @@ class _MyHomePageState extends State<MyHomePage> {
             'API PESSOA ALEATORIA',
           ),
           backgroundColor: Colors.black),
-      body: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.album),
-              title: Text('mostrar dados aqui'),
-              subtitle: Text('E-mail'),
-            )
-          ],
-        ),
-      ),
+      body: temUsuario
+          ? Container()
+          : Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('  ')
+                ],
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var response = await getAPiUrl();
-          print("Saiu da Função getApiUrl\n\n");
-          var jsonResponde = json.decode(response.body)["results"][0];
-          //print("jsonResponde[name]: " + jsonResponde["name"]);
-          preencheUser(jsonResponde);
-          print("Saiu da funcao userMode.preencheUser");
+        onPressed: () {
+          // var response = await getAPiUrl();
+          // print("Saiu da Função getApiUrl\n\n");
+          // var jsonResponde = json.decode(response.body)["results"][0];
+          // //print("jsonResponde[name]: " + jsonResponde["name"]);
+          // userModel.preencheUser(jsonResponde);
+          // print("Saiu da funcao userMode.preencheUser");
+          user = userModel.getUser();
+          setState(() {
+            temUsuario = true;
+            var pegaExibir = user;
+
+          });
         },
         tooltip: 'PESQUISAR',
         child: const Icon(Icons.search),
