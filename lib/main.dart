@@ -48,7 +48,7 @@ Future<List<dynamic>> exibirApi() async {
 class _MyHomePageState extends State<MyHomePage> {
   @override
 
-/*Começa sem usuário*/
+/*Começa sem usuário comentário*/
   bool temUsuario = false;
   User? user;
 
@@ -65,9 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
           : Card(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('  ')
-                ],
+                children: <Widget>[Text('  ')],
               ),
             ),
       floatingActionButton: FloatingActionButton(
@@ -82,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             temUsuario = true;
             var pegaExibir = user;
-
           });
         },
         tooltip: 'PESQUISAR',
